@@ -29,6 +29,8 @@ src/
 ├── components/
 │   ├── chat/            # AIチャットサポート + 翻訳
 │   ├── emergency/       # 緊急連絡先・病院検索
+│   ├── plans/           # 旅行プラン提案（3ティア比較）
+│   ├── preferences/     # ユーザー設定フォーム
 │   ├── route/           # ルート案内・公共交通ガイド
 │   ├── itinerary/       # 旅程関連
 │   ├── layout/          # レイアウト部品

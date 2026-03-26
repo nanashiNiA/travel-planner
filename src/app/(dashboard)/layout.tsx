@@ -29,6 +29,12 @@ export default async function DashboardLayout({
               >
                 マイ旅行
               </Link>
+              <Link
+                href="/settings/preferences"
+                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                設定
+              </Link>
             </nav>
           </div>
           <div className="flex items-center gap-4">

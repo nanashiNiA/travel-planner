@@ -20,6 +20,7 @@ model User {
   trips             Trip[]
   tripShares        TripShare[]
   chatConversations ChatConversation[]
+  preference        UserPreference?
 
   @@map("users")
 }
@@ -46,6 +47,7 @@ model Trip {
   budgetCategories  BudgetCategory[]
   tripShares        TripShare[]
   chatConversations ChatConversation[]
+  travelPlans       TravelPlan[]
 
   @@index([userId])
   @@map("trips")
@@ -203,4 +205,70 @@ model ChatMessage {
 
   @@index([conversationId])
   @@map("chat_messages")
+}
+
+// --- ユーザー設定 ---
+model UserPreference {
+  id                 String   @id @default(cuid())
+  userId             String   @unique @map("user_id")
+  accommodationType  String?  @map("accommodation_type")
+  budgetLevel        String?  @map("budget_level")
+  interests          String[] @default([])
+  dietaryRestrictions String? @map("dietary_restrictions")
+  mobilityNeeds      String?  @map("mobility_needs")
+  preferredTransport String?  @map("preferred_transport")
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_preferences")
+}
+
+// --- 旅行プラン ---
+enum PlanTier {
+  BUDGET
+  STANDARD
+  PREMIUM
+}
+
+model TravelPlan {
+  id          String   @id @default(cuid())
+  tripId      String   @map("trip_id")
+  tier        PlanTier
+  totalCost   Int      @map("total_cost")
+  summary     String?
+  isSelected  Boolean  @default(false) @map("is_selected")
+  generatedAt DateTime @default(now()) @map("generated_at")
+
+  trip  Trip             @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  items TravelPlanItem[]
+
+  @@index([tripId])
+  @@map("travel_plans")
+}
+
+model TravelPlanItem {
+  id            String   @id @default(cuid())
+  travelPlanId  String   @map("travel_plan_id")
+  dayNumber     Int      @map("day_number")
+  category      String
+  title         String
+  description   String?
+  estimatedCost Int      @map("estimated_cost")
+  startTime     String?  @map("start_time")
+  endTime       String?  @map("end_time")
+  address       String?
+  latitude      Float?
+  longitude     Float?
+  bookingUrl    String?  @map("booking_url")
+  alternatives  Json?
+  isCustomized  Boolean  @default(false) @map("is_customized")
+  orderIndex    Int      @map("order_index")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  travelPlan TravelPlan @relation(fields: [travelPlanId], references: [id], onDelete: Cascade)
+
+  @@index([travelPlanId])
+  @@map("travel_plan_items")
 }
