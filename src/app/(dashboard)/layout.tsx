@@ -2,6 +2,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { LinkButton } from "@/components/ui/link-button";
 import { LogoutButton } from "@/components/layout/logout-button";
+import { ChatFab } from "@/components/chat/chat-fab";
 
 export default async function DashboardLayout({
   children,
@@ -40,6 +41,7 @@ export default async function DashboardLayout({
         </div>
       </header>
       <main className="flex-1 container mx-auto px-4 py-8">{children}</main>
+      <ChatFab />
     </div>
   );
 }

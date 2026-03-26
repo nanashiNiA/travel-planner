@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 import { AiGenerateButton } from "@/components/itinerary/ai-generate-button";
 import { ItineraryDayView } from "@/components/itinerary/itinerary-day-view";
+import { TripContextSetter } from "@/components/chat/trip-context-setter";
 
 const statusLabels: Record<string, string> = {
   DRAFT: "下書き",
@@ -76,6 +77,7 @@ export default async function TripDetailPage(props: {
 
   return (
     <div className="space-y-6">
+      <TripContextSetter tripId={tripId} />
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>

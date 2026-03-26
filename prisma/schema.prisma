@@ -17,8 +17,9 @@ model User {
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  trips      Trip[]
-  tripShares TripShare[]
+  trips             Trip[]
+  tripShares        TripShare[]
+  chatConversations ChatConversation[]
 
   @@map("users")
 }
@@ -39,10 +40,11 @@ model Trip {
   createdAt     DateTime   @default(now()) @map("created_at")
   updatedAt     DateTime   @updatedAt @map("updated_at")
 
-  user             User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  tripDays         TripDay[]
-  budgetCategories BudgetCategory[]
-  tripShares       TripShare[]
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tripDays          TripDay[]
+  budgetCategories  BudgetCategory[]
+  tripShares        TripShare[]
+  chatConversations ChatConversation[]
 
   @@index([userId])
   @@map("trips")
@@ -168,4 +170,36 @@ model TripShare {
 enum Permission {
   VIEW
   EDIT
+}
+
+// --- チャット会話 ---
+model ChatConversation {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  tripId    String?  @map("trip_id")
+  title     String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trip     Trip?         @relation(fields: [tripId], references: [id], onDelete: SetNull)
+  messages ChatMessage[]
+
+  @@index([userId])
+  @@index([tripId])
+  @@map("chat_conversations")
+}
+
+// --- チャットメッセージ ---
+model ChatMessage {
+  id             String   @id @default(cuid())
+  conversationId String   @map("conversation_id")
+  role           String   // "user" | "assistant" | "system"
+  content        String
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  conversation ChatConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId])
+  @@map("chat_messages")
 }
