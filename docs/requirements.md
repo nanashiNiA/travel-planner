@@ -29,5 +29,5 @@
 | # | 機能 | Issue | 状態 | 概要 |
 |---|------|-------|------|------|
 | 5 | ホテル検索・予約管理 + プラン提案 | [#5](https://github.com/nanashiNiA/travel-planner/issues/5) | 完了 | AI 3ティアプラン提案、ホテル推薦、アイテム入替、ユーザー設定 |
-| 6 | レストラン検索 | [#6](https://github.com/nanashiNiA/travel-planner/issues/6) | 計画中 | 食事制限・アレルギー対応検索 |
-| 7 | 為替レート・支払いガイド | [#7](https://github.com/nanashiNiA/travel-planner/issues/7) | 計画中 | リアルタイム為替、通貨換算 |
+| 6 | レストラン検索 | [#6](https://github.com/nanashiNiA/travel-planner/issues/6) | 完了 | 食事制限フィルター、Places Text Search、プロンプト強化 |
+| 7 | 為替レート・支払いガイド | [#7](https://github.com/nanashiNiA/travel-planner/issues/7) | 完了 | リアルタイム為替換算、国別支払いガイド(10カ国) |
