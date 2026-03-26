@@ -29,6 +29,7 @@ src/
 ├── components/
 │   ├── chat/            # AIチャットサポート + 翻訳
 │   ├── emergency/       # 緊急連絡先・病院検索
+│   ├── route/           # ルート案内・公共交通ガイド
 │   ├── itinerary/       # 旅程関連
 │   ├── layout/          # レイアウト部品
 │   └── ui/              # UIコンポーネント (Base UI wrapper)
