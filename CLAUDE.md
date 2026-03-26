@@ -30,20 +30,27 @@ src/
 │   ├── itinerary/       # 旅程関連
 │   ├── layout/          # レイアウト部品
 │   └── ui/              # UIコンポーネント (Base UI wrapper)
+├── data/
+│   ├── languages.ts     # 翻訳対応言語マスターデータ
+│   └── phrase-book.ts   # カテゴリ別フレーズ集
+├── hooks/
+│   ├── use-speech-recognition.ts  # 音声入力フック
+│   └── use-speech-synthesis.ts    # 読み上げフック
 ├── lib/
 │   ├── supabase/        # Supabase client (server/client/middleware)
 │   ├── prisma.ts        # Prisma client singleton
 │   └── utils.ts         # cn() ユーティリティ
 ├── prompts/             # AIプロンプト定義
 ├── stores/              # Zustand stores
-├── types/               # 型定義
+├── types/               # 型定義（+ speech.d.ts）
 └── validators/          # Zod スキーマ
 prisma/
 └── schema.prisma        # DBスキーマ
 docs/
 ├── requirements.md      # 機能要件一覧
 ├── architecture.md      # アーキテクチャ詳細
-└── chat-support.md      # AIチャット設計メモ
+├── chat-support.md      # AIチャット設計メモ
+└── translation.md       # 翻訳機能設計メモ
 ```
 
 ## 開発ルール
