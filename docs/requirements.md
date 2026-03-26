@@ -21,7 +21,7 @@
 |---|------|-------|------|------|
 | 1 | AIチャットサポート（多言語対応） | [#1](https://github.com/nanashiNiA/travel-planner/issues/1) | 完了 | 母国語で質問できるAIチャット |
 | 2 | リアルタイム翻訳 | [#2](https://github.com/nanashiNiA/travel-planner/issues/2) | 完了 | テキスト翻訳・音声入出力・フレーズ集（カメラOCR後回し） |
-| 3 | 緊急連絡先・病院検索 | [#3](https://github.com/nanashiNiA/travel-planner/issues/3) | 計画中 | 国別緊急連絡先、最寄り病院検索 |
+| 3 | 緊急連絡先・病院検索 | [#3](https://github.com/nanashiNiA/travel-planner/issues/3) | 完了 | 国別緊急連絡先、最寄り病院検索、保険情報管理 |
 | 4 | ルート案内・交通ガイド | [#4](https://github.com/nanashiNiA/travel-planner/issues/4) | 計画中 | Google Maps連携、公共交通ガイド |
 
 ### 優先度: 中

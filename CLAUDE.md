@@ -14,6 +14,7 @@
 - **AI**: AI SDK v6 + OpenAI (gpt-4o-mini)
 - **状態管理**: Zustand
 - **フォーム**: React Hook Form + Zod バリデーション
+- **地図**: @vis.gl/react-google-maps (Google Maps JavaScript API)
 - **その他**: date-fns, Lucide icons, Sonner (toast), Recharts
 
 ## ディレクトリ構成
@@ -26,7 +27,8 @@ src/
 │   ├── api/             # APIルート (trips, ai/generate, ai/chat)
 │   └── auth/            # OAuth callback
 ├── components/
-│   ├── chat/            # AIチャットサポート
+│   ├── chat/            # AIチャットサポート + 翻訳
+│   ├── emergency/       # 緊急連絡先・病院検索
 │   ├── itinerary/       # 旅程関連
 │   ├── layout/          # レイアウト部品
 │   └── ui/              # UIコンポーネント (Base UI wrapper)
@@ -50,7 +52,8 @@ docs/
 ├── requirements.md      # 機能要件一覧
 ├── architecture.md      # アーキテクチャ詳細
 ├── chat-support.md      # AIチャット設計メモ
-└── translation.md       # 翻訳機能設計メモ
+├── translation.md       # 翻訳機能設計メモ
+└── emergency.md         # 緊急連絡先・病院検索設計メモ
 ```
 
 ## 開発ルール

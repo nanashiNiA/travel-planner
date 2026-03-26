@@ -11,6 +11,7 @@ import { ja } from "date-fns/locale";
 import { AiGenerateButton } from "@/components/itinerary/ai-generate-button";
 import { ItineraryDayView } from "@/components/itinerary/itinerary-day-view";
 import { TripContextSetter } from "@/components/chat/trip-context-setter";
+import { EmergencyButton } from "@/components/layout/emergency-button";
 
 const statusLabels: Record<string, string> = {
   DRAFT: "下書き",
@@ -95,6 +96,7 @@ export default async function TripDetailPage(props: {
           </div>
         </div>
         <div className="flex gap-2">
+          <EmergencyButton tripId={tripId} />
           <AiGenerateButton trip={trip} />
         </div>
       </div>

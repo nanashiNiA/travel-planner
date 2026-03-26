@@ -35,3 +35,10 @@ export type BudgetSummary = {
   spentAmount: number;
   remainingAmount: number;
 };
+
+export interface InsuranceInfo {
+  providerName?: string;
+  policyNumber?: string;
+  emergencyPhone?: string;
+  notes?: string;
+}

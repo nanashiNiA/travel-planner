@@ -36,6 +36,7 @@ model Trip {
   currency      String     @default("JPY")
   travelStyle   String?    @map("travel_style")
   coverImageUrl String?    @map("cover_image_url")
+  insuranceInfo Json?      @map("insurance_info")
   status        TripStatus @default(DRAFT)
   createdAt     DateTime   @default(now()) @map("created_at")
   updatedAt     DateTime   @updatedAt @map("updated_at")
