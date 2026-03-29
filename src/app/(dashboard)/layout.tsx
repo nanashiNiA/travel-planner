@@ -32,6 +32,12 @@ export default async function DashboardLayout({
                 マイ旅行
               </Link>
               <Link
+                href="/bookmarks"
+                className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+              >
+                お気に入り
+              </Link>
+              <Link
                 href="/settings/preferences"
                 className="text-sm text-muted-foreground transition-colors hover:text-foreground"
               >

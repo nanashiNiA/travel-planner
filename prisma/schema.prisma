@@ -21,6 +21,7 @@ model User {
   tripShares        TripShare[]
   chatConversations ChatConversation[]
   preference        UserPreference?
+  bookmarks         Bookmark[]
 
   @@map("users")
 }
@@ -48,6 +49,7 @@ model Trip {
   tripShares        TripShare[]
   chatConversations ChatConversation[]
   travelPlans       TravelPlan[]
+  bookmarks         Bookmark[]
 
   @@index([userId])
   @@map("trips")
@@ -271,4 +273,27 @@ model TravelPlanItem {
 
   @@index([travelPlanId])
   @@map("travel_plan_items")
+}
+
+// --- ブックマーク ---
+model Bookmark {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  type      String   // "place" | "restaurant" | "hotel" | "phrase" | "translation"
+  title     String
+  subtitle  String?
+  address   String?
+  latitude  Float?
+  longitude Float?
+  mapsUrl   String?  @map("maps_url")
+  metadata  Json?    // 追加情報（翻訳テキスト、フレーズ元テキストなど）
+  tripId    String?  @map("trip_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trip Trip? @relation(fields: [tripId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([tripId])
+  @@map("bookmarks")
 }

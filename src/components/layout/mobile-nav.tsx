@@ -13,6 +13,7 @@ import { useState } from "react";
 import {
   MenuIcon,
   MapIcon,
+  BookmarkIcon,
   SettingsIcon,
   PlusIcon,
   LogOutIcon,
@@ -62,6 +63,14 @@ export function MobileNav({ email }: MobileNavProps) {
               >
                 <MapIcon className="size-4" />
                 マイ旅行
+              </Link>
+              <Link
+                href="/bookmarks"
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent"
+              >
+                <BookmarkIcon className="size-4" />
+                お気に入り
               </Link>
               <Link
                 href="/trips/new"
