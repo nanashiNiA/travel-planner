@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { LinkButton } from "@/components/ui/link-button";
 import { LogoutButton } from "@/components/layout/logout-button";
 import { MobileNav } from "@/components/layout/mobile-nav";
+import { BottomTabBar } from "@/components/layout/bottom-tab-bar";
 import { ChatFab } from "@/components/chat/chat-fab";
 
 export default async function DashboardLayout({
@@ -58,9 +59,10 @@ export default async function DashboardLayout({
           </div>
         </div>
       </header>
-      <main className="flex-1 container mx-auto px-4 py-6 md:py-8">
+      <main className="flex-1 container mx-auto px-4 py-4 pb-20 md:py-8 md:pb-8">
         {children}
       </main>
+      <BottomTabBar />
       <ChatFab />
     </div>
   );

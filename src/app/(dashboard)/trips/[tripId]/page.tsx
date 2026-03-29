@@ -1,33 +1,21 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@/lib/supabase/server";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
-import { AiGenerateButton } from "@/components/itinerary/ai-generate-button";
-import { ItineraryDayView } from "@/components/itinerary/itinerary-day-view";
 import { TripContextSetter } from "@/components/chat/trip-context-setter";
-import { EmergencyButton } from "@/components/layout/emergency-button";
-import { LinkButton } from "@/components/ui/link-button";
+import { TripTabs } from "@/components/trip/trip-tabs";
+import { resolveCountryCode } from "@/data/destination-countries";
+import { getEmergencyContactByCountry } from "@/data/emergency-contacts";
+import { getPaymentGuideByCountry } from "@/data/payment-guide";
 
 const statusLabels: Record<string, string> = {
   DRAFT: "下書き",
   PLANNED: "計画済み",
   IN_PROGRESS: "旅行中",
   COMPLETED: "完了",
-};
-
-const itemTypeLabels: Record<string, string> = {
-  ATTRACTION: "観光",
-  RESTAURANT: "食事",
-  TRANSPORT: "移動",
-  ACCOMMODATION: "宿泊",
-  ACTIVITY: "体験",
-  OTHER: "その他",
 };
 
 export default async function TripDetailPage(props: {
@@ -43,6 +31,7 @@ export default async function TripDetailPage(props: {
 
   const dbUser = await prisma.user.findUnique({
     where: { supabaseId: user.id },
+    include: { preference: true },
   });
   if (!dbUser) return notFound();
 
@@ -52,16 +41,21 @@ export default async function TripDetailPage(props: {
       tripDays: {
         orderBy: { dayNumber: "asc" },
         include: {
-          itineraryItems: {
-            orderBy: { orderIndex: "asc" },
-          },
+          itineraryItems: { orderBy: { orderIndex: "asc" } },
         },
       },
       budgetCategories: true,
     },
   });
-
   if (!trip) return notFound();
+
+  const plans = await prisma.travelPlan.findMany({
+    where: { tripId },
+    include: {
+      items: { orderBy: [{ dayNumber: "asc" }, { orderIndex: "asc" }] },
+    },
+    orderBy: { totalCost: "asc" },
+  });
 
   const totalEstimatedCost = trip.tripDays.reduce(
     (sum, day) =>
@@ -73,97 +67,76 @@ export default async function TripDetailPage(props: {
     0
   );
 
-  const hasItinerary = trip.tripDays.some(
-    (day) => day.itineraryItems.length > 0
-  );
+  // Resolve destination for emergency/currency
+  const countryCode = resolveCountryCode(trip.destination);
+  const emergencyContact = countryCode
+    ? getEmergencyContactByCountry(countryCode) ?? null
+    : null;
+  const paymentGuide = countryCode
+    ? getPaymentGuideByCountry(countryCode) ?? null
+    : null;
+
+  // Get default coords from first itinerary item
+  const firstItemWithCoords = trip.tripDays
+    .flatMap((d) => d.itineraryItems)
+    .find((i) => i.latitude && i.longitude);
+  const defaultCoords = firstItemWithCoords
+    ? { lat: firstItemWithCoords.latitude!, lng: firstItemWithCoords.longitude! }
+    : null;
+
+  // User preferences
+  const userPreferences = dbUser.preference
+    ? {
+        accommodationType: dbUser.preference.accommodationType ?? undefined,
+        budgetLevel: dbUser.preference.budgetLevel ?? undefined,
+        interests: dbUser.preference.interests ?? undefined,
+        dietaryRestrictions: dbUser.preference.dietaryRestrictions ?? undefined,
+        preferredTransport: dbUser.preference.preferredTransport ?? undefined,
+      }
+    : null;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <TripContextSetter tripId={tripId} />
-      {/* Header */}
-      <div className="space-y-4">
-        <div>
-          <h1 className="text-2xl font-bold md:text-3xl">{trip.title}</h1>
-          <p className="text-muted-foreground mt-1">{trip.destination}</p>
-          <div className="flex flex-wrap items-center gap-2 mt-2 text-sm text-muted-foreground md:gap-4">
-            <span>
-              {format(new Date(trip.startDate), "yyyy/MM/dd (E)", {
-                locale: ja,
-              })}{" "}
-              -{" "}
-              {format(new Date(trip.endDate), "yyyy/MM/dd (E)", { locale: ja })}
-            </span>
-            <Badge variant="secondary">{statusLabels[trip.status]}</Badge>
-          </div>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <LinkButton href={`/trips/${tripId}/plans`} variant="outline" size="sm">
-            プラン提案
-          </LinkButton>
-          <LinkButton href={`/trips/${tripId}/restaurants`} variant="outline" size="sm">
-            レストラン
-          </LinkButton>
-          <LinkButton href={`/trips/${tripId}/currency`} variant="outline" size="sm">
-            為替
-          </LinkButton>
-          <LinkButton href={`/trips/${tripId}/expenses`} variant="outline" size="sm">
-            経費
-          </LinkButton>
-          <EmergencyButton tripId={tripId} />
-          <AiGenerateButton trip={trip} />
+
+      {/* Compact Header */}
+      <div>
+        <h1 className="text-xl font-bold md:text-2xl">{trip.title}</h1>
+        <div className="flex flex-wrap items-center gap-2 mt-1 text-sm text-muted-foreground">
+          <span>{trip.destination}</span>
+          <span>・</span>
+          <span>
+            {format(new Date(trip.startDate), "M/d", { locale: ja })} -{" "}
+            {format(new Date(trip.endDate), "M/d", { locale: ja })}
+          </span>
+          <Badge variant="secondary" className="text-xs">
+            {statusLabels[trip.status]}
+          </Badge>
         </div>
       </div>
 
-      {/* Budget Summary */}
+      {/* Budget Summary - Compact */}
       <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">予算概要</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            <div>
-              <p className="text-sm text-muted-foreground">総予算</p>
-              <p className="text-2xl font-bold">
-                {trip.totalBudget.toLocaleString()}円
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">推定合計</p>
-              <p className="text-2xl font-bold">
-                {totalEstimatedCost.toLocaleString()}円
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-muted-foreground">残り</p>
-              <p className="text-2xl font-bold">
-                {(trip.totalBudget - totalEstimatedCost).toLocaleString()}円
-              </p>
-            </div>
+        <CardContent className="py-3">
+          <div className="flex items-center justify-between text-sm">
+            <span className="text-muted-foreground">予算</span>
+            <span className="font-bold">
+              ¥{totalEstimatedCost.toLocaleString()} / ¥{trip.totalBudget.toLocaleString()}
+            </span>
           </div>
         </CardContent>
       </Card>
 
-      {/* Itinerary */}
-      {!hasItinerary ? (
-        <Card className="text-center py-12">
-          <CardContent>
-            <p className="text-muted-foreground mb-4">
-              まだ旅程がありません。AIで自動生成しましょう。
-            </p>
-            <AiGenerateButton trip={trip} />
-          </CardContent>
-        </Card>
-      ) : (
-        <div className="space-y-6">
-          {trip.tripDays.map((day) => (
-            <ItineraryDayView
-              key={day.id}
-              day={day}
-              itemTypeLabels={itemTypeLabels}
-            />
-          ))}
-        </div>
-      )}
+      {/* All features in tabs - 1 tap to switch */}
+      <TripTabs
+        trip={trip}
+        tripDays={trip.tripDays}
+        plans={plans}
+        userPreferences={userPreferences}
+        emergencyContact={emergencyContact}
+        paymentGuide={paymentGuide}
+        defaultCoords={defaultCoords}
+      />
     </div>
   );
 }
