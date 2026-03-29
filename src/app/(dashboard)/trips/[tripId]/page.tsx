@@ -106,6 +106,9 @@ export default async function TripDetailPage(props: {
           <LinkButton href={`/trips/${tripId}/currency`} variant="outline" size="sm">
             為替
           </LinkButton>
+          <LinkButton href={`/trips/${tripId}/expenses`} variant="outline" size="sm">
+            経費
+          </LinkButton>
           <EmergencyButton tripId={tripId} />
           <AiGenerateButton trip={trip} />
         </div>
