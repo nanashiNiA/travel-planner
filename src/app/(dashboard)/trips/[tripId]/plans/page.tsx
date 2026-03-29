@@ -68,7 +68,6 @@ export default async function PlansPage(props: {
         <PlanGenerationDialog
           trip={trip}
           userPreferences={userPreferences}
-          onGenerated={() => {}}
         />
       </div>
 
@@ -90,7 +89,6 @@ export default async function PlansPage(props: {
             <PlanGenerationDialog
               trip={trip}
               userPreferences={userPreferences}
-              onGenerated={() => {}}
             />
           </CardContent>
         </Card>

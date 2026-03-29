@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -26,14 +27,13 @@ interface PlanGenerationDialogProps {
     dietaryRestrictions?: string;
     preferredTransport?: string;
   } | null;
-  onGenerated: () => void;
 }
 
 export function PlanGenerationDialog({
   trip,
   userPreferences,
-  onGenerated,
 }: PlanGenerationDialogProps) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [preferences, setPreferences] = useState("");
   const { generate, isGenerating } = usePlanGeneration();
@@ -53,7 +53,7 @@ export function PlanGenerationDialog({
     if (success) {
       toast.success("3つのプランを生成しました");
       setOpen(false);
-      onGenerated();
+      router.refresh();
     } else {
       toast.error("プラン生成に失敗しました");
     }
