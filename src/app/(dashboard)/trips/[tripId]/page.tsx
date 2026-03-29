@@ -81,11 +81,11 @@ export default async function TripDetailPage(props: {
     <div className="space-y-6">
       <TripContextSetter tripId={tripId} />
       {/* Header */}
-      <div className="flex items-start justify-between">
+      <div className="space-y-4">
         <div>
-          <h1 className="text-3xl font-bold">{trip.title}</h1>
+          <h1 className="text-2xl font-bold md:text-3xl">{trip.title}</h1>
           <p className="text-muted-foreground mt-1">{trip.destination}</p>
-          <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
+          <div className="flex flex-wrap items-center gap-2 mt-2 text-sm text-muted-foreground md:gap-4">
             <span>
               {format(new Date(trip.startDate), "yyyy/MM/dd (E)", {
                 locale: ja,
@@ -96,14 +96,14 @@ export default async function TripDetailPage(props: {
             <Badge variant="secondary">{statusLabels[trip.status]}</Badge>
           </div>
         </div>
-        <div className="flex gap-2">
-          <LinkButton href={`/trips/${tripId}/plans`} variant="outline">
+        <div className="flex flex-wrap gap-2">
+          <LinkButton href={`/trips/${tripId}/plans`} variant="outline" size="sm">
             プラン提案
           </LinkButton>
-          <LinkButton href={`/trips/${tripId}/restaurants`} variant="outline">
+          <LinkButton href={`/trips/${tripId}/restaurants`} variant="outline" size="sm">
             レストラン
           </LinkButton>
-          <LinkButton href={`/trips/${tripId}/currency`} variant="outline">
+          <LinkButton href={`/trips/${tripId}/currency`} variant="outline" size="sm">
             為替
           </LinkButton>
           <EmergencyButton tripId={tripId} />

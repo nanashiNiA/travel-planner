@@ -54,7 +54,7 @@ export function PlanComparisonView({ plans, tripId }: PlanComparisonViewProps) {
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 md:grid-cols-3">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {plans.map((plan) => (
           <PlanTierCard
             key={plan.id}

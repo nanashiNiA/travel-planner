@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
@@ -17,6 +17,20 @@ export const metadata: Metadata = {
   title: "Travel Planner - AI旅行プランナー",
   description:
     "AIが最適な旅行プランを自動生成。地図連携・予算管理で旅行計画をもっと簡単に。",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Travel Planner",
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: "#ffffff",
 };
 
 export default function RootLayout({

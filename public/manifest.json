@@ -1,0 +1,18 @@
+{
+  "name": "Travel Planner - AI旅行プランナー",
+  "short_name": "Travel Planner",
+  "description": "海外旅行者向けオールインワン旅行プランナーアプリ",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/globe.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
